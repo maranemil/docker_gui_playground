@@ -1,0 +1,5 @@
+
+docker build -t xeyes
+
+docker run --rm -it -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --net=host xeyes
+#docker run --rm -it -e DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:ro --net=host stefanscherer/xeyes

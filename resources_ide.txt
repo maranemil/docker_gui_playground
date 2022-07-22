@@ -1,0 +1,87 @@
+#################################################
+Developing inside a docker Container
+#################################################
+
+Remote-Containers in Intellij
+https://www.jetbrains.com/help/idea/run-targets.html#debug-profile-analyze-coverage
+
+
+Remote-Containers in VS Code
+https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
+
+
+https://www.youtube.com/watch?v=mi8kpAgHYFo
+https://www.youtube.com/watch?v=3WJ678xFzBE
+https://www.youtube.com/watch?v=vME5H51UULw
+
+https://www.youtube.com/watch?v=ck6xQqSOlpw
+https://github.com/daliasheasha/HelloWorldDocker
+https://github.com/daliasheasha/MyWebApp
+
+https://gitlab.com/gitschooldude/hello/
+https://docs.docker.com/develop/dev-best-practices/
+https://www.jetbrains.com/help/go/docker.html
+
+https://code.visualstudio.com/docs/remote/containers
+https://www.docker.com/blog/how-to-develop-inside-a-container-using-visual-studio-code-remote-containers/
+https://docs.microsoft.com/en-us/learn/modules/use-docker-container-dev-env-vs-code/
+
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+
+sudo dpkg -i docker-desktop-4.10.1-amd64.deb
+
+docker-ce not found
+docker-ce-cli not found
+docker-compose-plugin not found
+
+sudo apt --fix-broken install
+
+System requirements
+https://docs.docker.com/desktop/install/linux-install/
+https://docs.docker.com/compose/install/
+
+Start VS Code, run the Remote-Containers: Open Folder in Container. command from the Command Palette (F1) or quick actions Status bar item, and select the project folder you would like to set up the container for.
+
+Now pick a starting point for your dev container. You can either select a base dev container definition from a filterable list, or use an existing Dockerfile or Docker Compose file if one exists in the folder you selected.
+
+
+Open an existing workspace in a container .code-workspace
+
+Use the Remote-Containers: Open Workspace in Container... command.
+Use File > Open Workspace... once you have opened a folder that contains a .code-workspace file in a container.
+
+------------------------------------------------------------
+
+
+https://www.tecmint.com/best-open-source-linux-text-editors/
+
+$ sudo apt install vim     [On Debian, Ubuntu and Mint]
+$ sudo dnf install vim     [On RHEL, CentOS and Fedora]
+$ sudo pacman -S vim       [On Arch Linux and Manjaro]
+$ sudo zypper install vim  [On OpenSuse]
+
+
+sudo apt install emacs
+sudo apt install kakoune
+sudo apt install vim
+sudo apt install nano
+sudo apt install neovim
+
+GUI
+
+sudo apt install bluefish
+sudo apt install gedit
+sudo apt install kate
+sudo apt install geany
+
+sudo snap install leafpad
+sudo snap install notepad-plus-plus
+sudo snap install brackets
+
+----------------------
+
+
+
+

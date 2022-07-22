@@ -1,0 +1,3 @@
+docker build -t xeyes - < Dockerfile
+$ XSOCK=/tmp/.X11-unix/X0
+$ docker run -v $XSOCK:$XSOCK xeyes

@@ -1,0 +1,8 @@
+docker build -t desktop .
+docker run -it -d --name=mydesktop -p 3389:3389 desktop
+docker network create -d macvlan --subnet=172.16.0.0/16 --gateway=172.16.0.1 -o parent=enp4s0 exposed
+docker run -it -d --name=lan-desktop --net=exposed  --ip=172.16.1.200 desktop
+
+
+
+

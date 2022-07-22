@@ -1,0 +1,7 @@
+# build
+
+#docker build -t docker-gui-ssh -f .\Dockerfile .
+docker build -t docker-gui-ssh .
+
+
+docker container run -it --env="DISPLAY" --net=host docker-gui-ssh

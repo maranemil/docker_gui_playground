@@ -1,0 +1,50 @@
+webtop
+https://github.com/behnamasadi/cpp_tutorials/
+https://docs.linuxserver.io/images/docker-webtop
+https://fleet.linuxserver.io/image?name=linuxserver/webtop
+https://hub.docker.com/r/linuxserver/webtop/
+https://github.com/linuxserver/docker-webtop
+------------------------------------------------
+
+
+kasmweb
+https://hub.docker.com/r/kasmweb/core-ubuntu-bionic
+
+sudo docker run --rm  -it --shm-size=512m -p 6901:6901 -e VNC_PW=password kasmweb/<image>:<tag>
+User : kasm_user
+Password: password
+------------------------------------------------
+
+ubuntu
+https://hub.docker.com/_/ubuntu
+https://hub.docker.com/search?q=ubuntu
+https://hub.docker.com/r/ubuntu/apache2
+------------------------------------------------
+
+apt install bionic-backports
+apt install cockpit-docker
+
+------------------------------------------------
+
+docker pull ubuntu
+docker pull centos
+docker run -it ubuntu
+cat /etc/os-release
+
+------------------------------------------------
+
+Portainer as Docker GUI
+https://www.youtube.com/watch?v=YBb9PeFqr94
+
+docker run -d -p 9000:9000 -p 8000:8000 --name portainer --restart always -v /var/run/docker.sock:/var/run/docker.sock  portainer/portainer
+
+------------------------------------------------
+
+https://www.ctl.io/developers/blog/post/setting-up-a-simple-docker-dev-environment
+https://spin.atomicobject.com/2021/06/15/developing-docker-vs-code/
+
+docker run -p 4567:4567 hello-world
+
+docker run -ti -v "$PWD":/usr/local/apache2/htdocs/ -p 8080:80 httpd:2.4
+
+docker run -ti -v "$PWD":/usr/src/app -p 8000:8000 node:6 node /usr/src/app/hello_world.js

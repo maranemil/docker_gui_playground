@@ -1,0 +1,5 @@
+# build
+
+docker build -t docker-pcmanfm:v1 .
+
+docker container run -it --env="DISPLAY" --net=host  docker-pcmanfm:v1

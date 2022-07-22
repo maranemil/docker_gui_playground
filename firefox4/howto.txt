@@ -1,0 +1,9 @@
+
+https://stackoverflow.com/questions/16296753/can-you-run-gui-applications-in-a-linux-docker-container
+
+docker build -t firefox .
+
+docker run -ti --rm \
+   -e DISPLAY=$DISPLAY \
+   -v /tmp/.X11-unix:/tmp/.X11-unix \
+   firefox
