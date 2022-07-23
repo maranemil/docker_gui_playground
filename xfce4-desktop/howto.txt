@@ -1,7 +1,0 @@
-docker build -t docker-lubuntu:v1 .
-
-https://github.com/mviereck/dockerfile-x11docker-xfce/blob/master/Dockerfile
-https://hub.docker.com/r/x11docker/xfce/dockerfile
-https://stackoverflow.com/questions/68132840/xfce4-in-a-docker-container-on-windows-with-vcxsrv-setup-for-multiple-screens
-https://gitlab.desy.de/frank.schluenzen/headless-xfce/-/blob/master/Dockerfile
-
