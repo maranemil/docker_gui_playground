@@ -2,7 +2,7 @@
 # https://discussion.scottibyte.com/t/building-an-ubuntu-desktop-in-docker/61
 
 # ubuntu gui  access via the Remote Desktop Protocol (RDP).
-FROM ubuntu:latest
+FROM ubuntu:16.04
 RUN apt update && DEBIAN_FRONTEND=noninteractive apt install -y lubuntu-desktop
 
 RUN rm /run/reboot-required*
@@ -17,4 +17,5 @@ export XDG_CURRENT_DESKTOP=LXQt\\n\
 export XDG_CONFIG_DIRS=/etc/xdg/xdg-Lubuntu:/etc/xdg\\n\
 " > ~/.xsessionrc' /etc/xrdp/startwm.sh
 EXPOSE 3389
+#CMD service xrdp start ; bash
 CMD service xrdp start ; bash

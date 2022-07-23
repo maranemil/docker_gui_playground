@@ -1,4 +1,0 @@
-
-docker build -t docker-ubuntu:v1 .
-
-docker container run -it --env="DISPLAY" --net=host  docker-ubuntu:v1
