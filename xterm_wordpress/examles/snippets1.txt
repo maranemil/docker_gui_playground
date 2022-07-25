@@ -1,0 +1,282 @@
+
+https://stackoverflow.com/questions/47252273/unable-to-build-a-mariadb-base-in-a-dockerfile
+
+Dockerfile
+
+FROM mariadb:latest
+ADD sql/ /docker-entrypoint-initdb.d
+
+ENV MYSQL_ROOT_PASSWORD test123
+ENV MYSQL_DATABASE testDB
+ENV MYSQL_USER toto
+ENV MYSQL_PASSWORD test123
+
+RUN apt-get update && apt-get -y install vim
+
+EXPOSE 3306
+CMD ["mysqld"]
+
+docker build -t maria .
+docker run --name mariadb -ti -d -p 3306:3306 maria
+
+######################################################################
+
+https://stackoverflow.com/questions/53219709/docker-mysql-command-not-found-in-sh-file
+
+Dockerfile
+
+FROM node:8
+MAINTAINER Tri Nguyen "me@mydomain.com"
+
+RUN mkdir -p /usr/src
+WORKDIR /usr/src
+
+COPY package.json /usr/src
+RUN npm install
+RUN npm rebuild node-sass --force
+RUN set -ex; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends \
+    mysql-client
+
+COPY . /usr/src
+
+EXPOSE 3000 8000
+CMD [ "npm", "start" ]
+
+
+docker-compose.yml
+version: "2"
+services:
+  universe:
+    build: .
+    working_dir: /usr/src
+    environment:
+    - NODE_ENV=default
+    - PORT=3000
+    volumes:
+    - /usr/src
+    ports:
+    - "3000:3000"
+    - "8000:8000"
+    links:
+    - redis
+    - mysql
+
+  redis:
+    image: redis
+    volumes:
+    - /data/redis:/data
+
+  mysql:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "database_name"
+      MYSQL_USER: "username"
+      MYSQL_PASSWORD: "password"
+    volumes:
+    - /data/mysql:/var/lib/mysql
+
+--------------------------
+
+https://towardsdatascience.com/how-to-run-mysql-using-docker-ed4cebcd90e4
+
+docker-compose.yml file.
+
+version: '3.1'
+services:
+  db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_db
+    ports:
+      - "3307:3306"
+    volumes:
+      - $HOME/dump.sql:/dump.sql
+
+docker compose up -t mysql_snippets_db_1 .
+docker exec -it mysql_snippets_db_1 bash
+
+-------------------------------------
+
+https://github.com/alexanderschnitzler/docker-mysqldump
+
+--------------------------
+
+https://stackoverflow.com/questions/25920029/setting-up-mysql-and-importing-dump-within-dockerfile
+
+
+
+mysql:
+ image: mysql:5.6
+ environment:
+   MYSQL_ROOT_PASSWORD: pass
+ ports:
+   - 3306:3306
+ volumes:
+   - ./db-dump:/docker-entrypoint-initdb.d
+
+
+mysql:
+  image: mysql:5.6
+  ports:
+    - "3306:3306"
+  environment:
+    MYSQL_ROOT_PASSWORD: root
+    MYSQL_USER: theusername
+    MYSQL_PASSWORD: thepw
+    MYSQL_DATABASE: mydb
+  volumes:
+    - ./data:/docker-entrypoint-initdb.d
+
+
+
+RUN /bin/bash -c "/usr/bin/mysqld_safe --skip-grant-tables &" && \
+  sleep 5 && \
+  mysql -u root -e "CREATE DATABASE mydb" && \
+  mysql -u root mydb < /tmp/dump.sql
+
+------------
+
+https://devopsheaven.com/mysql/mysqldump/databases/docker/backup/2017/09/17/backup-mysql-database-using-docker.html
+https://gist.github.com/spalladino/6d981f7b33f6e0afe6bb
+https://gist.github.com/devdrops/c59ee84504d128a7913a480b1191d66e
+
+# Backup
+docker exec CONTAINER /usr/bin/mysqldump -u root --password=root DATABASE > backup.sql
+
+# Restore
+cat backup.sql | docker exec -i CONTAINER /usr/bin/mysql -u root --password=root DATABASE
+
+
+docker cp /path/to/my/dump.sql mycontainer:/dump.sql
+docker exec mysql_container /bin/bash -c 'mysql -uroot -proot < /dump.sql'
+....
+
+# dump
+docker exec mycontainer /bin/bash -c '/usr/bin/mysqldump -u root --password=${MYSQL_ROOT_PASSWORD}  --databases mydatabase' > /path/to/my/dump.sql
+
+
+# 1 import
+docker cp /path/to/my/dump.sql mycontainer:/dump.sql
+docker exec mycontainer /bin/bash -c 'mysql -u root --password=${MYSQL_ROOT_PASSWORD}  < /dump.sql'
+# 2 import
+cat /path/to/my/dump.sql | docker exec -i mycontainer /bin/bash -c '/usr/bin/mysql -u root --password=${MYSQL_ROOT_PASSWORD} mydatabase'
+
+-------------------------
+https://stackoverflow.com/questions/26598738/how-to-create-user-database-in-script-for-docker-postgres
+
+init.sql
+CREATE USER docker;
+CREATE DATABASE docker;
+GRANT ALL PRIVILEGES ON DATABASE docker TO docker;
+
+
+Dockerfile
+FROM library/postgres
+ENV POSTGRES_USER docker
+ENV POSTGRES_PASSWORD docker
+ENV POSTGRES_DB docker
+COPY init.sql /docker-entrypoint-initdb.d/
+
+docker run -e POSTGRES_USER=docker -e POSTGRES_PASSWORD=docker -e POSTGRES_DB=docker library/postgres
+
+
+gosu postgres postgres --single <<- EOSQL
+    CREATE USER docker;
+    CREATE DATABASE docker;
+    GRANT ALL PRIVILEGES ON DATABASE docker TO docker;
+EOSQL
+
+version: "3.3"
+services:
+  db:
+    build:
+      context: ./Docker
+      dockerfile: db.Dockerfile
+    volumes:
+      - ./var/pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+
+Docker/init.sql
+CREATE USER myUser;
+CREATE DATABASE myApp_dev;
+GRANT ALL PRIVILEGES ON DATABASE myApp_dev TO myUser;
+CREATE DATABASE myApp_test;
+GRANT ALL PRIVILEGES ON DATABASE myApp_test TO myUser;
+
+Docker/db.Dockerfile
+FROM postgres:11.5-alpine
+COPY init.sql /docker-entrypoint-initdb.d/
+
+docker-compose -f docker-compose.yml up --no-start
+docker-compose -f docker-compose.yml start
+
+-------------------------------------------------------------------
+
+https://unix.stackexchange.com/questions/545919/error-cant-connect-to-local-mysql-server-through-socket-var-run-mysqld-mysq
+
+FROM ubuntu:19.04
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get -y install \
+ apache2 \
+ php7.2 \
+ php7.2-mysql \
+ supervisor \
+ wget
+
+RUN echo 'mysql-server mysql-server/root_password password root' | debconf-set-selections && \
+echo 'mysql-server mysql-server/root_password_again password root' | debconf-set-selections
+
+RUN apt-get install -qqy mariadb-server
+
+RUN wget http://wordpress.org/latest.tar.gz && \
+ tar xzvf latest.tar.gz && \
+ cp -R ./wordpress/* /var/www/html && \
+ rm /var/www/html/index.html
+
+RUN (/usr/bin/mysqld_safe &); sleep 5; mysqladmin -u root -proot create wordpress
+
+COPY wp-config.php /var/www/html/wp-config.php
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+EXPOSE 80
+
+CMD ["/usr/bin/supervisord"]
+
+-----------------------------------------
+
+https://stackoverflow.com/questions/43880026/import-data-sql-mysql-docker-container
+
+mysql:
+  image: mysql:latest
+  container_name: mysql-container
+  ports:
+    - 3306:3306
+  volumes:
+    - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+  environment:
+    MYSQL_ROOT_PASSWORD: secret
+    MYSQL_DATABASE: name_db
+    MYSQL_USER: user
+    MYSQL_PASSWORD: password
+
+
+
+
+
+
+
+
+
+
+
+
+

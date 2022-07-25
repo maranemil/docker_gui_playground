@@ -1,0 +1,71 @@
+version: "3"
+
+#Create db and backend containers
+#services:
+  db:
+    container_name: db
+    #Pull the image uploaded to Docker Hub
+    image: mysql:5.7.30
+    #Environment variable settings
+    environment:
+      TZ: Asia/Tokyo #Set TimeZone as well as Dockerfile
+      MYSQL_USER: root
+      MYSQL_ROOT_PASSWORD: password
+    #Specify the path of the configuration file to mount
+    volumes:
+      - mysql_data:/var/lib/mysql
+    #Set port
+    ports:
+      - "3316:3306"
+    #Set IP address
+    networks:
+      app_net: #App described later_Set to use the following IPs in the net network space
+        ipv4_address: 172.20.0.2
+
+  backend:
+    container_name: backend
+    #Execute ComposeFile and specify the path when it is built
+    build: ./backend/
+    image: backend
+    #Run gem to start the server, 0.0.0.Bind to 0 for full access
+    command: bundle exec rails server -b 0.0.0.0
+    #Always start the container
+    tty: true
+    #Launch input interface docker run-synonymous with it of it
+    stdin_open: true
+
+    #Backend is cache, temp, log,Mount on git
+    volumes:
+      - ./backend:/app:cached
+      - bundle_data:/usr/local/bundle:cached
+      - /app/vendor
+      - /app/tmp
+      - /app/log
+      - /app/.git
+    environment:
+      TZ: Asia/Tokyo
+
+    #Control startup order,After db
+    depends_on:
+      - db
+    ports:
+      - 5000:3000 #Port forwarding
+    networks:
+      app_net:
+        ipv4_address: 172.20.0.3
+
+
+#Set up your own network
+networks:
+  #app_Define a network space called net
+  app_net:
+    driver: bridge #bridge Connect to network
+    ipam: #IP settings
+      driver: default
+      config:
+        - subnet: 172.20.0.0/24 #Define Subnet
+
+#Define two volumes
+volumes:
+  mysql_data:
+  bundle_data:

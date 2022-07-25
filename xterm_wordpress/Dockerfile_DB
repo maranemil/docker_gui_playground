@@ -1,0 +1,21 @@
+FROM mariadb:latest
+
+#ADD sql/ /docker-entrypoint-initdb.d
+
+ENV MYSQL_ROOT_PASSWORD password
+ENV MYSQL_DATABASE wordpress
+#ENV MYSQL_USER root
+#ENV MYSQL_PASSWORD password
+
+RUN apt-get update && apt-get -y install vim
+
+COPY wordpress.sql .
+
+RUN /bin/bash -c "/usr/bin/mysqld_safe --skip-grant-tables &" && \
+    sleep 1 && \
+    mysql -u root -e "CREATE DATABASE wordpress;"
+
+sleep 5
+
+EXPOSE 3306
+CMD ["mysqld"]

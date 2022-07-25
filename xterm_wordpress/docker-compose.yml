@@ -1,0 +1,34 @@
+version: '3'
+services:
+
+  wordpress_test_em:
+    build: ./Dockerfile_WP
+    image: wordpress_test_em:latest
+    container_name: wordpress_test_em
+    links:
+      - mariadb_test_em_db:mysql
+    environment:
+      - WORDPRESS_DB_PASSWORD=password
+      - WORDPRESS_DB_USER=root
+      - DISPLAY=:0
+    ports:
+      - "8080:80"
+    volumes:
+      - ./html:/var/www/html
+      - /tmp/.X11-unix:/tmp/.X11-unix
+
+  mariadb_test_em_db:
+    build: ./Dockerfile_DB
+    image: mariadb_test_em_db:latest
+    container_name: mariadb_test_em_db
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=wordpress
+    volumes:
+      - ./wordpress.sql:/docker-entrypoint-initdb.d/dump.sql
+    #volumes:
+    #  - ./database:/var/lib/mysql
+
+  #volumes:
+  # mariadb:
+  #  external: true

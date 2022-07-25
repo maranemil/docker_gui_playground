@@ -1,0 +1,40 @@
+https://raw.githubusercontent.com/docker-library/wordpress/master/docker-entrypoint.sh
+https://github.com/docker-library/wordpress/blob/master/docker-entrypoint.sh
+https://github.com/docker-library/wordpress
+
+https://github.com/docker-library/wordpress/blob/193647657b9c00b68b63ba9ecf306c915764f8f5/latest/php7.4/apache/Dockerfile
+
+https://github.com/docker-library/wordpress/tree/master/latest/php7.4/apache
+https://github.com/docker-library/wordpress/blob/master/latest/php7.4/apache/docker-entrypoint.sh
+https://github.com/docker-library/wordpress/blob/master/latest/php7.4/apache/wp-config-docker.php
+https://github.com/docker-library/wordpress/blob/master/latest/php7.4/apache/Dockerfile
+
+https://github.com/MariaDB/mariadb-docker
+https://github.com/dockerfile/mariadb
+https://hub.docker.com/_/mariadb/
+https://hub.docker.com/_/wordpress
+https://hub.docker.com/_/mariadb
+https://hub.docker.com/_/mysql/
+https://docs.docker.com/engine/reference/commandline/import/
+
+https://github.com/docker-library/php/blob/master/docker-php-source
+https://github.com/docker-library/php/blob/master/apache2-foreground
+https://github.com/docker-library/php
+
+https://zoomadmin.com/HowToInstall/UbuntuPackage/apt-utils
+
+#####################################
+wp install
+#####################################
+admin
+wordpress_test_em
+admin@example.localhost
+
+http://localhost:8080/
+http://localhost:8080/wp-login.php
+
+#####################################
+backup
+#####################################
+mysqldump -h 192.168.32.2 -u root -p wordpress > wordpress.sql
+docker cp wordpress_test_em:/var/www/html/wordpress.sql wordpress.sql
