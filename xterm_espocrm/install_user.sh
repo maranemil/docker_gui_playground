@@ -1,6 +1,6 @@
 
 apt-get update
-apt-get install -y apt-utils xterm bluefish gedit geany kate
+apt-get install -y apt-utils xterm bluefish gedit geany kate wget
 apt-get install -y sudo
 useradd -G sudo developer
 
@@ -20,7 +20,17 @@ chown ${uid}:${gid} -R /home/developer
 ## USER developer
 ## ENV HOME /home/developer
 
-#su - developer
-#export DISPLAY=:0
-#xterm
-#sudo chmod 0777 file
+# su - developer
+# export DISPLAY=:0
+# xterm
+# sudo chmod 0777 file
+
+# apt install snapd
+# snap install codium --classic
+# service --status-all
+
+# wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg     | gpg --dearmor     | sudo dd of=/usr/share/keyrings/vscodium-archive-keyring.gpg
+# echo 'deb [ signed-by=/usr/share/keyrings/vscodium-archive-keyring.gpg ] https://download.vscodium.com/debs vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list
+# sudo apt update && sudo apt install codium
+
+
