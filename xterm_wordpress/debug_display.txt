@@ -1,0 +1,204 @@
+---------------------------------------------------------------------------------
+
+environment:
+	- DISPLAY: .0 # DISPLAY=:0
+volumes:
+      - /tmp/.X11-unix:/tmp/.X11-unix
+
+echo $DISPLAY
+export DISPLAY=:0
+echo $DISPLAY
+
+chmod -R 777 ../html/
+
+---------------------------------------------------------------------------------
+https://itsfoss.com/linux-terminal-emulators/
+
+sudo apt install tilix
+sudo apt install konsole
+sudo apt install gnome-terminal
+sudo apt install kdevelop # 800mb
+sudo apt install codelite # 64mb
+sudo apt install kate konsole # 64mb
+
+---------------------------------------------------------------------------------
+
+xterm: Xt error: Can't open display: :0
+
+export DISPLAY=:0
+DISPLAY=:0; xterm
+export DISPLAY=:0; xterm
+env DISPLAY=10.94.XXX.XXX:1 xterm
+
+apt install strace
+export DISPLAY=:0
+strace xterm
+
+ifconfig: command not found
+apt update
+apt install net-tools
+
+ifconfig
+eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+lo: flags=73<UP,LOOPBACK,RUNNING>  mtu 65536
+
+
+https://github.com/pelya/xserver-xsdl/issues/91
+
+export DISPLAY=127.0.0.1:1
+export DISPLAY=127.0.0.1:0
+xterm
+export DISPLAY=:0.0
+
+https://www.cyberciti.biz/faq/linux-unix-appleosx-noxauth-program-cannot-forward-with-spoofing/
+xauth -f ~/.Xauthority list| tail -1
+xauth command not found
+sudo apt-get install xauth
+
+
+export DISPLAY=localhost:0.0
+echo $DISPLAY
+ssh -X developer@localhost
+
+
+apt update && apt install xinit
+
+https://www.baeldung.com/linux/no-x11-display-error
+
+echo $DISPLAY
+set | grep DISPLAY
+export DISPLAY=:0.0
+export DISPLAY=unix:0.0
+unset DISPLAY
+
+xhost +developer
+sudo -Eu xterm
+
+set | grep DISPLAY
+DISPLAY=:0
+xauth list $DISPLAY
+xauth list
+
+file /root/.Xauthority does not exist
+
+netstat --listen
+netstat: command not found
+
+sudo apt update
+sudo apt install net-tools
+
+touch ~/.Xauthority
+xauth generate :0 . trusted
+xauth add ${HOST}:0 . $(xxd -l 16 -p /dev/urandom)
+xauth list
+
+xauth list $DISPLAY
+
+DISPLAY=:0 xterm
+xterm -e
+
+cat /etc/sudoers.d/developer
+developer ALL=(ALL) NOPASSWD: ALL
+root ALL=NOPASSWD: ALL
+
+xauth list :0.0
+
+cat /etc/resolv.conf
+
+search home
+nameserver 127.0.0.11
+options ndots:0
+
+export DISPLAY=127.0.0.11:0.0
+xterm: Xt error: Can't open display: 127.0.0.11:0.0
+
+https://toolspond.com/fixed-xterm-display-is-not-set/
+
+startx
+xclock
+export DISPLAY=localhost:0.0
+xinit
+
+export DISPLAY=$(grep nameserver /etc/resolv.conf | awk '{print $2}'):0.0
+echo $DISPLAY
+127.0.0.11:0.0
+
+bluefish
+Unable to init server: Could not connect: Connection refused
+
+-----------------------------------------------------------
+
+
+ApplicationUser.php
+AddSystemUser.php
+
+https://github.com/espocrm/espocrm/blob/master/application/Espo/Services/User.php
+
+https://github.com/espocrm/espocrm
+https://forum.espocrm.com/forum/developer-help/51714-php-code-to-create-a-user
+
+
+// initialize an Entity Manager instance
+$entityManager = $this->getEntityManager();
+// get the contact information
+$contactId = $contactObject->get("id");
+$firstName = $contactObject->get("firstName");
+$lastName = $contactObject->get("lastName");
+// combine the contact's first name and last name to create a new user name - or use any other string
+$usename = strtolower($firstName).".".strtolower($lastName);
+// define a password - use any value
+$password = "my-password";
+// encrypt the password
+$fileM = new \Espo\Core\Utils\File\Manager();
+$config = new \Espo\Core\Utils\Config($fileM);
+$passwordHash = new \Espo\Core\Utils\PasswordHash($config);
+$encodedPassword = $passwordHash->hash($password,true);
+// create a new User instance
+$userObject = $entityManager->getEntity('User');   // create a new user instance
+// load the new user entity instance
+$userObject->set("firstName",$firstName);
+$userObject->set("lastName",$lastName);
+$userObject->set("userName",$usename);
+$userObject->set("password",$encodedPassword);
+$userObject->set("confirmPasword",$encodedPassword);
+$userObject->set("contactId",$contactId);
+$userObject->set("isActive",true);
+$userObject->set("isPortalUser",1);
+$userObject->set("type","portal");
+// persist the new user instance
+$entityManager->saveEntity($userObject);
+// get the new user id
+$newUserObject = $entityManager->getRepository('User')->where(['contactId'=>$contactId])->findOne();
+$userId = $newUserObject->get('id');
+
+
+
+$password = "123456789";
+$fileM = new \Espo\Core\Utils\File\Manager();
+$config = new \Espo\Core\Utils\Config($fileM);
+$passwordHash = new \Espo\Core\Utils\PasswordHash($config);
+$encodedPassword = $passwordHash->hash($password,true);
+
+use Espo\Entities\{
+    User,
+    AuthToken,
+};
+
+if ($authToken) {
+    $hash = $authToken->get('hash');
+} else {
+    $hash = $this->passwordHash->hash($password);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
