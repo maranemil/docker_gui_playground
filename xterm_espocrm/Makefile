@@ -4,10 +4,16 @@ SHELL = /bin/sh
 build:
 	#docker-compose up -d
 	docker-compose -f docker-compose.yml up -d
+	docker exec espocrm bash -c 'cd /var/www/html/ && \
+		chmod -R 777 ../html/ && \
+		php command.php clearCache && php command.php rebuild'
 
 build-last:
 	#docker-compose up -d
 	docker-compose -f docker-compose-new.yml up -d
+		docker exec espocrm bash -c 'cd /var/www/html/ && \
+		chmod -R 777 ../html/ && \
+		php command.php clearCache && php command.php rebuild'
 
 adduser:
 	docker cp install_user.sh espocrm:/var/www/html/install_user.sh
